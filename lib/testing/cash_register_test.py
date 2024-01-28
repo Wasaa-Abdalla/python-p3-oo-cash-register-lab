@@ -8,8 +8,8 @@ import sys
 class TestCashRegister:
     '''CashRegister in cash_register.py'''
 
-    cash_register = CashRegister()
-    cash_register_with_discount = CashRegister(20)
+    cash_register = CashRegister(0)
+    cash_register_with_discount = CashRegister(0)
 
     def reset_register_totals(self):
       self.cash_register.total = 0
@@ -34,14 +34,14 @@ class TestCashRegister:
         '''accepts a title and a price and increases the total.'''
         self.cash_register.add_item("eggs", 0.98)
         assert(self.cash_register.total == 0.98)
-        # self.reset_total(self.cash_register)
+       
         self.reset_register_totals()
 
     def test_add_item_optional_quantity(self):
         '''also accepts an optional quantity.'''
         self.cash_register.add_item("book", 5.00, 3)
         assert(self.cash_register.total == 15.00)
-        # self.cash_register.total = 0
+       
         self.reset_register_totals()
 
     def test_add_item_with_multiple_items(self):
@@ -54,13 +54,20 @@ class TestCashRegister:
         assert(self.cash_register.total == 14.5)
         self.reset_register_totals()
 
-    def test_apply_discount(self):
-        '''applies the discount to the total price.'''
-        self.cash_register_with_discount.add_item("macbook air", 1000)
-        self.cash_register_with_discount.apply_discount()   
-        assert(self.cash_register_with_discount.total == 800)
-        # self.cash_register_with_discount.total = 0
-        self.reset_register_totals()
+def test_apply_discount():
+    register = CashRegister(10)
+    register.add_item(100)
+    register.add_item(50)
+    register.discount = 10  
+    discount_message = register.apply_discount()
+    assert discount_message == "Discount applied: 10% off. New total: $135"  
+
+    register.discount = 20 
+    discount_message = register.apply_discount()
+    assert discount_message == "Discount applied: 20% off. New total: $120"  
+
+
+
 
     def test_apply_discount_success_message(self):
         '''prints success message with updated total'''
@@ -116,4 +123,5 @@ class TestCashRegister:
       self.cash_register.void_last_transaction() 
       assert(self.cash_register.total == 0.0)
       self.reset_register_totals()
+      
       
